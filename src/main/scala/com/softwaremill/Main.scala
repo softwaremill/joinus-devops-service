@@ -6,7 +6,7 @@ import akka.stream.ActorMaterializer
 import akka.http.scaladsl.server.Directives._
 import com.typesafe.scalalogging.StrictLogging
 
-import scala.util.{Failure, Success}
+import scala.util.{Failure, Properties, Success}
 
 object Main extends App with StrictLogging {
   implicit val as = ActorSystem()
@@ -24,6 +24,11 @@ object Main extends App with StrictLogging {
         logger.error("Error")
         complete(500, "ERROR")
       }
+    } ~
+    path("environment") {
+      val environment = Properties.envOrElse("SML_ENV", "")
+      logger.info(s"Environment: $environment")
+      complete(s"""{"environment": "$environment"}""")
     }
   } ~ post {
     path("dowork") {
