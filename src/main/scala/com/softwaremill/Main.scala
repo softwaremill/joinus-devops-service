@@ -50,9 +50,9 @@ object Main extends App with StrictLogging {
     }
   }
 
-  Http().newServerAt("0.0.0.0", 8081).bind(routes).onComplete {
+  Http().newServerAt("0.0.0.0", 8080).bind(routes).onComplete {
     case Success(binding) =>
-      logger.info("Server started")
+      logger.info(s"Server started ${binding.localAddress}")
       sys.addShutdownHook {
         Try(Await.ready(binding.unbind(), 1.seconds)) match {
           case Failure(ex) =>
