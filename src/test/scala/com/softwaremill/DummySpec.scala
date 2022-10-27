@@ -1,8 +1,9 @@
 package com.softwaremill
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class DummySpec extends FlatSpec with Matchers {
+class DummySpec extends AnyFlatSpec with Matchers {
 
   it should "add two numbers" in {
     // given
