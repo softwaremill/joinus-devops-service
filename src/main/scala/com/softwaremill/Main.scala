@@ -2,16 +2,18 @@ package com.softwaremill
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.stream.ActorMaterializer
 import akka.http.scaladsl.server.Directives._
 import com.typesafe.scalalogging.StrictLogging
 
-import scala.util.{Failure, Properties, Success}
+import java.util.concurrent.Executors
+import scala.concurrent.{Await, ExecutionContext}
+import scala.concurrent.duration.DurationInt
+import scala.util.{Failure, Properties, Success, Try}
 
 object Main extends App with StrictLogging {
-  implicit val as = ActorSystem()
-  import as.dispatcher
-  implicit val mat = ActorMaterializer()
+
+  implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newCachedThreadPool())
+  implicit val system: ActorSystem  = ActorSystem()
 
   var isOk = true
 
@@ -25,11 +27,11 @@ object Main extends App with StrictLogging {
         complete(500, "ERROR")
       }
     } ~
-    path("environment") {
-      val environment = Properties.envOrElse("SML_ENV", "")
-      logger.info(s"Environment: $environment")
-      complete(s"""{"environment": "$environment"}""")
-    }
+      path("environment") {
+        val environment = Properties.envOrElse("SML_ENV", "")
+        logger.info(s"Environment: $environment")
+        complete(s"""{"environment": "$environment"}""")
+      }
   } ~ post {
     path("dowork") {
       parameter("magicnumber".as[Int]) { mn =>
@@ -48,10 +50,24 @@ object Main extends App with StrictLogging {
     }
   }
 
-  Http().bindAndHandle(routes, "0.0.0.0", 8081).onComplete {
-    case Success(_) => logger.info("Server started")
+  Http().newServerAt("0.0.0.0", 8081).bind(routes).onComplete {
+    case Success(binding) =>
+      logger.info("Server started")
+      sys.addShutdownHook {
+        Try(Await.ready(binding.unbind(), 1.seconds)) match {
+          case Failure(ex) =>
+            logger.warn("Could not unbind AkkaHttp binding in a given time!", ex)
+          case Success(_) =>
+            logger.debug("AkkaHttp has been unbounded")
+        }
+        Try(Await.ready(system.terminate(), 1.seconds)) match {
+          case Failure(ex) =>
+            logger.warn("Could not terminate Actor System in a given time!", ex)
+          case Success(_) =>
+            logger.debug("Actor System has been terminated")
+        }
+      }
     case Failure(f) =>
       logger.error("Cannot start server", f)
-      as.shutdown()
   }
 }

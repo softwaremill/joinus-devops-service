@@ -1,20 +1,30 @@
 import sbt._
 import Keys._
 
-val slf4jApi = "org.slf4j" % "slf4j-api" % "1.7.12"
-val logBackClassic = "ch.qos.logback" % "logback-classic" % "1.1.3"
-val scalaLogging = "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0"
-val json4s = "org.json4s" %% "json4s-native" % "3.2.10"
-val akkaHttp = "com.typesafe.akka" %% "akka-http-experimental" % "1.0"
-val akkaSlf4j = "com.typesafe.akka" %% "akka-slf4j" % "2.3.12"
-val scalatest = "org.scalatest" %% "scalatest" % "3.0.5" % "test"
-
 name := "joinus-devops-service"
 
 organization := "com.softwaremill"
 
-version := "0.0.1-SNAPSHOT"
+version := "1.0.0-SNAPSHOT"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.13.10"
 
-libraryDependencies ++= List(slf4jApi, logBackClassic, scalaLogging, json4s, akkaHttp, akkaSlf4j, scalatest)
+mainClass := Some("com.softwaremill.Main")
+
+libraryDependencies ++= {
+  val AkkaVersion         = "2.7.0"
+  val AkkaHttpVersion     = "10.4.0"
+  val Json4sVersion       = "3.6.12"
+  val ScalaLoggingVersion = "3.9.4"
+  val ScalatestVersion    = "3.2.9"
+
+  Seq(
+    "com.typesafe.akka"          %% "akka-actor"    % AkkaVersion,
+    "com.typesafe.akka"          %% "akka-stream"   % AkkaVersion,
+    "com.typesafe.akka"          %% "akka-http"     % AkkaHttpVersion,
+    "com.typesafe.scala-logging" %% "scala-logging" % ScalaLoggingVersion,
+    "org.json4s"                 %% "json4s-native" % Json4sVersion,
+    "com.typesafe.akka"          %% "akka-slf4j"    % AkkaVersion,
+    "org.scalatest"              %% "scalatest"     % ScalatestVersion % "test"
+  )
+}
