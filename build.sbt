@@ -13,7 +13,7 @@ libraryDependencies ++= {
   val Json4sVersion       = "4.0.6"
   val ScalaLoggingVersion = "3.9.5"
   val Slf4jVersion        = "2.0.6"
-  val ScalatestVersion    = "3.2.14"
+  val ScalatestVersion    = "3.2.15"
   Seq(
     "com.typesafe.akka"          %% "akka-actor"    % AkkaVersion,
     "com.typesafe.akka"          %% "akka-stream"   % AkkaVersion,
