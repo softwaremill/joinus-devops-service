@@ -9,7 +9,7 @@ mainClass := Some("com.softwaremill.Main")
 
 libraryDependencies ++= {
   val AkkaVersion         = "2.8.1"
-  val AkkaHttpVersion     = "10.5.1"
+  val AkkaHttpVersion     = "10.5.2"
   val Json4sVersion       = "4.0.6"
   val ScalaLoggingVersion = "3.9.5"
   val Slf4jVersion        = "2.0.7"
