@@ -1,11 +1,11 @@
 import sbt._
 import Keys._
 
-name := "joinus-devops-service"
+name         := "joinus-devops-service"
 organization := "com.softwaremill"
-version := "1.0.0-SNAPSHOT"
+version      := "1.0.0-SNAPSHOT"
 scalaVersion := "2.13.10"
-mainClass := Some("com.softwaremill.Main")
+mainClass    := Some("com.softwaremill.Main")
 
 libraryDependencies ++= {
   val AkkaVersion         = "2.8.2"
@@ -24,4 +24,12 @@ libraryDependencies ++= {
     "org.slf4j"                   % "slf4j-simple"  % Slf4jVersion,
     "org.scalatest"              %% "scalatest"     % ScalatestVersion % "test"
   )
+}
+
+assembly / assemblyMergeStrategy := {
+  case PathList("module-info.class")               => MergeStrategy.last
+  case path if path.endsWith("/module-info.class") => MergeStrategy.last
+  case x =>
+    val oldStrategy = (assembly / assemblyMergeStrategy).value
+    oldStrategy(x)
 }
