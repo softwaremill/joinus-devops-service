@@ -14,9 +14,11 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: adopt
-          java-version: 11
+          java-version: 17
       - name: Build and Test
         run: sbt -v +test
+      - name: Prepare Uber jar
+        run: sbt -v +assembly
       - name: Apply automerge label
         if: github.actor == 'dependabot[bot]'
         run: gh pr edit "$PR_URL" --add-label "automerge"
