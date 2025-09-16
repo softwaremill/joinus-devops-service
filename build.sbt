@@ -11,7 +11,7 @@ libraryDependencies ++= {
   val AkkaVersion         = "2.8.8"
   val AkkaHttpVersion     = "10.5.3"
   val Json4sVersion       = "4.0.7"
-  val ScalaLoggingVersion = "3.9.5"
+  val ScalaLoggingVersion = "3.9.6"
   val Slf4jVersion        = "2.0.17"
   val ScalatestVersion    = "3.2.19"
   Seq(
