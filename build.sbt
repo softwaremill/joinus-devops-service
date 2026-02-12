@@ -4,7 +4,7 @@ import Keys._
 name         := "joinus-devops-service"
 organization := "com.softwaremill"
 version      := "1.0.0-SNAPSHOT"
-scalaVersion := "2.13.18"
+scalaVersion := "3.8.1"
 mainClass    := Some("com.softwaremill.Main")
 
 libraryDependencies ++= {
